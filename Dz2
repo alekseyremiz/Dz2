@@ -1,0 +1,96 @@
+#include <stdio.h>
+#include <locale.h>
+#include <stdlib.h>
+#include <string.h>
+
+
+
+/*  1111111111111111111111111111111111111
+Программа меняет местами первое и последнее слова строки.
+@arguments str - строка, в которой нужно поменять слова местами
+@returns Возвращает строку с переставленными первым и последним словами */
+char* Reverse(char* str)
+{
+   int len = strlen(str);
+
+   char* temp = malloc((len + 1) * sizeof(char));
+
+   int first = 0;
+   int dernier = 0;
+   int f = 0;
+
+   for (int i = 0; i < strlen(str); i++)
+   {
+      if (f == 0 && str[i] == ' ')
+      {
+         first = i;
+         f = 1;
+      }
+      if (str[i] == ' ')
+         dernier = i;
+   }
+
+   int last = 0;
+   for (int i = dernier + 1; i < strlen(str); i++) {
+      temp[last] = str[i];
+      last++;
+   }
+   temp[last] = ' ';
+   last++;
+
+   for (int i = first + 1; i < dernier; i++)
+   {
+      temp[last] = str[i];
+      last++;
+   }
+   temp[last] = ' ';
+   last++;
+
+   for (int i = 0; i < first; i++)
+   {
+      temp[last] = str[i];
+      last++;
+   }
+   temp[last] = '\0';
+   str = temp;
+
+   return str;
+
+}
+
+/*33333333333333333333333333333333333333333333
+Программа выводит в файл g текст из f, при этом убрав каждое четвертое слово и слова, которые начинаются с буквы 'п'.*/
+void N3()
+{
+   FILE* F;
+   errno_t err = fopen_s(&F, "f.txt", "r");
+
+   if (err)
+   {
+      perror("file F");
+      return;
+   }
+
+   FILE* G;
+   errno_t err_ = fopen_s(&G, "g.txt", "w+");
+
+   if (err_)
+   {
+      perror("file G");
+      return;
+   }
+   int c = 0;
+
+   for (char tmp = 0; fscanf_s(F, "%d", &tmp) != EOF;)
+   {
+      if (tmp == ' ')
+      {
+         ++c;
+      }
+
+      if ((c + 1) % 4 != 0 && tmp == 'ï')
+         fscanf_s(F, "%c", G);
+
+   }
+   return;
+}
